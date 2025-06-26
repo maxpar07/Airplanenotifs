@@ -1,0 +1,23 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "jetspotter.fullname" . }}
+  labels: {{ include "jetspotter.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+data:
+  LOCATION_LATITUDE: {{ .Values.jetspotter.location.latitude | quote }}
+  LOCATION_LONGITUDE: {{ .Values.jetspotter.location.longitude | quote }}
+  FETCH_INTERVAL:  {{ .Values.jetspotter.fetchInterval | quote }}
+  MAX_RANGE_KILOMETERS: {{ .Values.jetspotter.maxRangeKilometers | quote }}
+  MAX_SCAN_RANGE_KILOMETERS: {{ .Values.jetspotter.maxScanRangeKilometers | quote }}
+  MAX_ALTITUDE_FEET: {{ .Values.jetspotter.maxAltitudeFeet | quote }}
+  AIRCRAFT_TYPES: {{ .Values.jetspotter.aircraftTypes | join "," }}
+  MAX_AIRCRAFT_SLACK_MESSAGE: {{ .Values.slack.maxAircraftPerMessage | quote }}
+  DISCORD_COLOR_ALTITUDE: {{ .Values.discord.colorAltitude | quote }}
+  GOTIFY_URL: {{ .Values.gotify.url }}
+  METRICS_PORT: {{ .Values.metrics.port | quote }}
+  NTFY_SERVER: {{ .Values.ntfy.server }}
+  NTFY_TOPIC: {{ .Values.ntfy.topic }}
+  # Web UI configuration
+  WEB_UI_ENABLED: {{ .Values.webUI.enabled | quote }}
+  WEB_UI_PORT: {{ .Values.webUI.port | quote }}

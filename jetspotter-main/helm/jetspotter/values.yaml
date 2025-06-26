@@ -1,0 +1,114 @@
+jetspotter:
+  # Latitude and Longitude coordinates of the location you want to use.
+  location:
+    latitude: 51.17348
+    longitude: 5.45921
+  # Interval in seconds between fetching aircraft, minimum is 60 due to API rate limiting.
+  fetchInterval: 60
+  #  Maximum range in kilometers from the location that you want aircraft to be spotted.
+  maxRangeKilometers: 30
+  # Maximum scan range in kilometers from the location to fetch aircraft data.
+  maxScanRangeKilometers: 30
+  # Maximum altitude in feet that you want aircraft to be spotted. Set to 0 to disable.
+  maxAltitudeFeet: 0
+  # A comma separated list of types that you want to spot
+  #  If not set, 'ALL' will be used, which will disable the filter and show all aircraft within range.
+  # Full list can be found at https://www.icao.int/publications/doc8643/pages/search.aspx in 'Type Designator' column.
+  aircraftTypes:
+    - ALL
+    # - F16
+    # - A400
+
+# Web UI configuration
+webUI:
+  # Enable the web UI interface
+  enabled: true
+  # Port to expose the web UI on
+  port: 8080
+  # Password for the admin user
+  password: jetspotter
+
+# Ingress configuration
+ingress:
+  # Enable the ingress object
+  enabled: false
+  # Annotations for the ingress object
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # Hostname for the ingress
+  hosts:
+    - host: jetspotter.local
+      paths:
+        - path: /
+          pathType: Prefix
+  # TLS configuration
+  tls: []
+  # - secretName: jetspotter-tls
+  #   hosts:
+  #     - jetspotter.local
+
+deployment:
+  # Annotations to be added to the deployment
+  annotations: {}
+    # myKey: myValue
+    # anotherKey: anotherValue
+
+service:
+  # Annotations to be added to the service
+  annotations: {}
+    # myKey: myValue
+    # anotherKey: anotherValue
+
+metrics:
+  # Port to expose metrics on
+  port: 7070
+  # Create a serviceMonitor object for prometheus-operator
+  serviceMonitor:
+    enabled: false
+    interval: 60s
+    scrapeTimeout: 30s
+    labels: {}
+    annotations: {}
+    endpointAdditionalProperties: {}
+
+slack:
+  # Webhook used to send notifications to Slack. If not set, no messages will be sent to Slack.
+  webhook: ""
+  # Maximum amount of aircraft to show in a single slack message.
+  # Note that a single slack message only supports up to 50 'blocks' and each aircraft that we display has multiple blocks.
+  maxAircraftPerMessage: 8
+
+discord:
+  # Webhook used to send notifications to Discord. If not set, no messages will be sent to Discord.
+  webhook: ""
+  # Discord notifications use an embed color based on the alitute of the aircraft.
+  colorAltitude: "true"
+
+gotify:
+  # URL to send gotify notification to
+  url: ""
+  # Token to authenticate with gotify server
+  token: ""
+
+ntfy:
+  # server to send ntfy notification to
+  server: "https://ntfy.sh"
+  # Topic to publish notification to
+  topic: ""
+
+
+image:
+  repository: ghcr.io/vvanouytsel/jetspotter
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+
+resources: 
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi

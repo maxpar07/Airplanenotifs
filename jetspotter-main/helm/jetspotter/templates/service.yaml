@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jetspotter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  labels:
+    {{- include "jetspotter.labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: {{ .Values.metrics.port }}
+      targetPort: metrics
+      name: metrics
+    {{- if .Values.webUI.enabled }}
+    - port: {{ .Values.webUI.port }}
+      targetPort: webui
+      name: webui
+    {{- end }}
+  selector:
+    {{- include "jetspotter.selectorLabels" . | nindent 4 }}
